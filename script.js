@@ -22,19 +22,39 @@ Array.prototype.myPop = function () {
   return elementToRemove
 }
 
-Array.prototype.myForeach = function(func) {
-	for (let i = 0; i < this.length; i++) {
-		func(this[i], i, this)
+Array.prototype.myForeach = function(func, thisArg) {
+	let context = this
+	if (arguments.length > 1){
+		context = thisArg
 	}
+	if(typeof func != 'function'){
+		throw new Error('Not a function')
+	}
+	if(typeof func === 'function') {
+	  for (let i = 0; i < context.length; i++) {
+	  func.call(context, this[i], i, this)
+	  }
+	}
+	
 }
 
-Array.prototype.myMap = function(func) {
+Array.prototype.myMap = function(func, thisArg) {
+	let context = this
+	if (arguments.length > 1) {
+		context = thisArg
+	}
+	if(typeof func != 'function'){
+		throw new Error('Not a function')
+	}
+	if(typeof func === 'function'){
 	let newArr = []
-    for (let i = 0; i < this.length; i++) {
-		 newArr.push(func(this[i], i, this))
+    for (let i = 0; i < context.length; i++) {
+		newArr.push(func.call(context, this[i], i, this))
 		 
 	}
-	return newArr
+	return newArr	
+	}
+
 }
 
 Array.prototype.myReduce = function(func, initialVal) {
@@ -76,6 +96,7 @@ Array.myFrom = function(arg, func) {
 
 const arr = new MyArray(1, 4, [2,4], { name: 'Misha' });
 const arr2 = new MyArray(10, 4, 2, 3);
+
 
 
 
